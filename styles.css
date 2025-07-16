@@ -1,0 +1,114 @@
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #0f1117;
+  color: white;
+}
+
+header {
+  background-color: #1f2230;
+  padding: 1rem 2rem;
+  text-align: center;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #2f80ed;
+}
+
+.upload-section {
+  padding: 2rem;
+  text-align: center;
+  background-color: #171a24;
+  border-bottom: 1px solid #333;
+}
+
+.upload-section h2 {
+  margin-bottom: 1rem;
+}
+
+.upload-section input[type="file"] {
+  padding: 0.5rem;
+  margin-right: 1rem;
+  background-color: #fff;
+  color: #000;
+}
+
+.upload-section button {
+  padding: 0.5rem 1rem;
+  background-color: #2f80ed;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.warning {
+  margin-top: 1rem;
+  color: #f39c12;
+  font-size: 0.9rem;
+}
+
+.mixer {
+  padding: 2rem;
+}
+
+.instrument-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.label {
+  width: 120px;
+  font-size: 1.2rem;
+}
+
+.blocks {
+  flex-grow: 1;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.blocks div {
+  width: 40px;
+  height: 40px;
+  background-color: #2f80ed;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.blocks div:hover {
+  background-color: #56ccf2;
+}
+
+.instrument-row button {
+  margin-left: 1rem;
+  background-color: #27ae60;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+footer {
+  padding: 1.5rem;
+  text-align: center;
+  background-color: #1f2230;
+  border-top: 1px solid #333;
+}
+
+footer button {
+  margin: 0 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #2f80ed;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+footer button:hover {
+  background-color: #56ccf2;
+}
