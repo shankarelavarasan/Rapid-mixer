@@ -27,16 +27,32 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     /**
-     * Handles the file upload event.
+     * Handles the file upload event by sending the file to the backend server.
      * @param {Event} event - The file upload event object.
      */
-    const handleFileUpload = (event) => {
+    const handleFileUpload = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
 
-        const fileReader = new FileReader();
-        fileReader.onload = (e) => initAudio(e.target.result);
-        fileReader.readAsArrayBuffer(file);
+        const formData = new FormData();
+        formData.append('audio', file);
+
+        try {
+            const response = await fetch('http://localhost:3001/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('File uploaded successfully:', data.filename);
+                // Now you can use the filename to process the audio
+            } else {
+                console.error('File upload failed');
+            }
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
     };
 
     /**

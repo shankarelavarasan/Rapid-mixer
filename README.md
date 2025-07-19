@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# Rapid-mixer
-=======
 # Rapid Mixer
 
 A simple web-based audio mixer that allows you to upload a song and control the volume of different instrument tracks.
@@ -26,4 +23,3 @@ Future versions of this project may explore:
 *   Integration with a server-side stem separation service.
 *   Advanced audio visualizations.
 *   Saving and loading mixer presets.
->>>>>>> 646d864 (🚀 Initial version of Rapid Mixer with refactored code)

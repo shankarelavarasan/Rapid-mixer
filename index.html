@@ -1,68 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<<<<<<< HEAD
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rapid Mixer</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <header>
-    <h1>🎧 Rapid Mixer</h1>
-  </header>
 
-  <section class="upload-section">
-    <h2>Upload Your Song</h2>
-    <input type="file" id="fileInput" accept="audio/*">
-    <button onclick="splitSong()">Split Instrument</button>
-    <p class="warning">⚠️ Warning: Local only. Closing tab will erase progress.</p>
-  </section>
-
-  <section class="mixer">
-    <!-- Instrument Rows -->
-    <div class="instrument-row" id="drums">
-      <div class="label">🥁 Drums</div>
-      <div class="blocks"></div>
-      <button onclick="addBlock('drums')">+</button>
-    </div>
-    <div class="instrument-row" id="bass">
-      <div class="label">🎸 Bass</div>
-      <div class="blocks"></div>
-      <button onclick="addBlock('bass')">+</button>
-    </div>
-    <div class="instrument-row" id="piano">
-      <div class="label">🎹 Piano</div>
-      <div class="blocks"></div>
-      <button onclick="addBlock('piano')">+</button>
-    </div>
-    <div class="instrument-row" id="vocals">
-      <div class="label">🎤 Vocal</div>
-      <div class="blocks"></div>
-      <button onclick="addBlock('vocals')">+</button>
-    </div>
-    <div class="instrument-row" id="fx">
-      <div class="label">🎚️ FX</div>
-      <div class="blocks"></div>
-      <button onclick="addBlock('fx')">+</button>
-    </div>
-    <div class="instrument-row" id="others">
-      <div class="label">🌀 Others</div>
-      <div class="blocks"></div>
-      <button onclick="addBlock('others')">+</button>
-    </div>
-  </section>
-
-  <footer>
-    <button onclick="playAll()">▶️ Preview</button>
-    <button onclick="resetMixer()">🔁 Reset</button>
-    <button onclick="exportMix()">⬇️ Export MP3</button>
-  </footer>
-
-  <script src="main.js"></script>
-</body>
-</html>
-=======
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rapid Mixer</title>
@@ -82,4 +21,3 @@
     <script src="script.js"></script>
 </body>
 </html>
->>>>>>> 646d864 (🚀 Initial version of Rapid Mixer with refactored code)
