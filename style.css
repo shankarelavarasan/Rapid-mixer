@@ -1,72 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+    --bg-gradient: linear-gradient(135deg, #1a0c2e, #3b1a4a);
+    --primary-glow: #ff3b8d;
+    --secondary-glow: #00e5ff;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-primary: #f0f0f0;
+    --text-secondary: #b3b3b3;
+    --accent-color: #ff3b8d;
+}
+
 body {
-    font-family: sans-serif;
-    background-color: #f0f0f0;
-    color: #333;
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text-primary);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    padding: 1rem;
+    overflow-x: hidden;
 }
 
 .container {
-    background-color: white;
+    background: var(--glass-bg);
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 80%;
-    max-width: 900px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    width: 90%;
+    max-width: 1200px;
+    transition: all 0.3s ease;
 }
 
 .upload-section {
     text-align: center;
     margin-bottom: 2rem;
-    border: 2px dashed #ccc;
-    padding: 1rem;
-    border-radius: 8px;
+    border: 2px dashed var(--glass-border);
+    padding: 2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.upload-section:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent-color);
 }
 
 .upload-section h1 {
     margin-top: 0;
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
 .upload-section p {
-    color: #777;
+    color: var(--text-secondary);
     font-size: 0.9rem;
+}
+
+#song-upload-label {
+    display: block;
+}
+
+#song-upload {
+    display: none; /* Hide the actual input */
 }
 
 .mixer {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
 }
 
 .track {
-    background-color: #eee;
-    padding: 1rem;
-    border-radius: 8px;
+    background: var(--glass-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
     text-align: center;
     font-size: 1.2rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.track:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0 15px var(--primary-glow), 0 0 30px var(--secondary-glow);
+}
+
+.track span {
+    font-weight: 600;
 }
 
 input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
     width: 100%;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.3s;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid #1a0c2e;
+    box-shadow: 0 0 10px var(--accent-color);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid #1a0c2e;
+    box-shadow: 0 0 10px var(--accent-color);
 }
 
 button {
-    background-color: #4CAF50;
+    background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow));
     color: white;
-    padding: 10px 15px;
+    padding: 12px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
+    font-weight: 600;
     margin-top: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
 
 button:hover {
-    background-color: #45a049;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px var(--primary-glow);
+}
+
+#waveform {
+    grid-column: 1 / -1;
+    margin-bottom: 2rem;
+}
+
+.controls {
+    grid-column: 1 / -1; /* Span across all columns */
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
 }

@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Holds the application's state
     const appState = {
+        wavesurfer: null,
         audioContext: null,
         audioBuffer: null,
         sources: [],
@@ -23,7 +24,33 @@ document.addEventListener('DOMContentLoaded', () => {
      * Initializes the application by setting up event listeners.
      */
     const init = () => {
+        const uploadLabel = document.getElementById('song-upload-label');
+
         songUpload.addEventListener('change', handleFileUpload);
+
+        // Add drag and drop listeners
+        uploadLabel.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadLabel.classList.add('dragging');
+        });
+
+        uploadLabel.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadLabel.classList.remove('dragging');
+        });
+
+        uploadLabel.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            uploadLabel.classList.remove('dragging');
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                songUpload.files = files;
+                handleFileUpload({ target: songUpload });
+            }
+        });
     };
 
     /**
@@ -33,6 +60,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const handleFileUpload = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
+
+        // Initialize WaveSurfer
+        if (appState.wavesurfer) {
+            appState.wavesurfer.destroy();
+        }
+        appState.wavesurfer = WaveSurfer.create({
+            container: '#waveform',
+            waveColor: 'violet',
+            progressColor: 'purple',
+            barWidth: 2,
+            barRadius: 3,
+            cursorWidth: 1,
+            height: 100,
+            barGap: 3
+        });
+
+        appState.wavesurfer.load(URL.createObjectURL(file));
 
         const formData = new FormData();
         formData.append('audio', file);
@@ -46,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log('File uploaded successfully:', data.filename);
-                // Now you can use the filename to process the audio
+                initAudio(file);
             } else {
                 console.error('File upload failed');
             }
@@ -59,15 +103,21 @@ document.addEventListener('DOMContentLoaded', () => {
      * Initializes the Web Audio API with the provided audio data.
      * @param {ArrayBuffer} audioData - The audio data to decode.
      */
-    const initAudio = (audioData) => {
-        appState.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        appState.audioContext.decodeAudioData(audioData, (buffer) => {
-            appState.audioBuffer = buffer;
-            setupMixerUI();
-        }, (error) => {
-            console.error('Error decoding audio data:', error);
-            alert('Error decoding audio file. Please try a different file.');
-        });
+    const initAudio = (file) => {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            appState.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            appState.audioContext.decodeAudioData(e.target.result, (buffer) => {
+                appState.audioBuffer = buffer;
+                setupMixerUI();
+            }, (error) => {
+                console.error('Error decoding audio data:', error);
+                alert('Error decoding audio file. Please try a different file.');
+            });
+        };
+
+        reader.readAsArrayBuffer(file);
     };
 
     /**
@@ -82,8 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
             mixerContainer.appendChild(trackElement);
         });
 
+        const controlsContainer = document.getElementById('controls-container');
         const playButton = createPlayButton();
-        mixerContainer.appendChild(playButton);
+        controlsContainer.appendChild(playButton);
     };
 
     /**
@@ -99,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = document.createElement('span');
         title.innerHTML = `${config.stem_emojis[index]} ${stem}`;
 
-        const gainNode = appState.audioContext.createGain();
+        const gainNode = appState.wavesurfer.backend.ac.createGain();
         appState.gainNodes.push(gainNode);
 
         const volumeSlider = document.createElement('input');
@@ -109,8 +160,31 @@ document.addEventListener('DOMContentLoaded', () => {
         volumeSlider.step = 0.01;
         volumeSlider.value = 1;
         volumeSlider.oninput = (e) => {
-            gainNode.gain.value = e.target.value;
+            appState.wavesurfer.setVolume(e.target.value);
         };
+
+        // For now, we'll just have one master volume control
+        // In the future, this would be expanded for multi-track control
+        if(index === 0) {
+            const masterVolumeSlider = document.createElement('input');
+            masterVolumeSlider.type = 'range';
+            masterVolumeSlider.min = 0;
+            masterVolumeSlider.max = 1;
+            masterVolumeSlider.step = 0.01;
+            masterVolumeSlider.value = 1;
+            masterVolumeSlider.oninput = (e) => {
+                appState.wavesurfer.setVolume(e.target.value);
+            };
+
+            const title = document.createElement('span');
+            title.innerHTML = `🔊 Master`;
+
+            trackElement.appendChild(title);
+            trackElement.appendChild(masterVolumeSlider);
+        } else {
+            // Hide other tracks for now
+            trackElement.style.display = 'none';
+        }
 
         trackElement.appendChild(title);
         trackElement.appendChild(volumeSlider);
@@ -133,21 +207,11 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {HTMLButtonElement} playButton - The button that controls playback.
      */
     const togglePlayback = (playButton) => {
-        if (appState.isPlaying) {
-            appState.sources.forEach(source => source.stop());
-            appState.isPlaying = false;
+        if (appState.wavesurfer.isPlaying()) {
+            appState.wavesurfer.pause();
             playButton.textContent = '▶️ Play All';
         } else {
-            appState.sources = [];
-            config.stems.forEach((_, index) => {
-                const source = appState.audioContext.createBufferSource();
-                source.buffer = appState.audioBuffer;
-                source.connect(appState.gainNodes[index]);
-                appState.gainNodes[index].connect(appState.audioContext.destination);
-                source.start(0);
-                appState.sources.push(source);
-            });
-            appState.isPlaying = true;
+            appState.wavesurfer.play();
             playButton.textContent = '⏹️ Stop All';
         }
     };

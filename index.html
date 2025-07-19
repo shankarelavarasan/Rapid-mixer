@@ -10,14 +10,22 @@
 <body>
     <div class="container">
         <div class="upload-section">
-            <h1>Upload Your Song</h1>
-            <input type="file" id="song-upload">
-            <p>⚠️ Warning: Local only. Closing tab will erase progress.</p>
+            <label for="song-upload" id="song-upload-label">
+                <h1>Upload Your Song</h1>
+                <p>Click or drag and drop a file</p>
+                <p>⚠️ Warning: Local only. Closing tab will erase progress.</p>
+            </label>
+            <input type="file" id="song-upload" accept="audio/*">
         </div>
+        <div id="waveform"></div>
         <div class="mixer" id="mixer-container">
             <!-- Tracks will be dynamically added here -->
         </div>
+        <div class="controls" id="controls-container">
+            <!-- Playback controls will be dynamically added here -->
+        </div>
     </div>
+    <script src="https://unpkg.com/wavesurfer.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
