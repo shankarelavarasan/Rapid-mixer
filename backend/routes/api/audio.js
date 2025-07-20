@@ -19,4 +19,8 @@ const upload = multer({ storage: storage });
 
 router.post('/upload', upload.single('audio'), audioController.uploadAudio);
 
+router.get('/recent', audioController.getRecentFiles);
+
+router.get('/samples', audioController.getSampleTracks);
+
 module.exports = router;
