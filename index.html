@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Loading audio...</p>
+    </div>
     <div class="container">
         <div class="upload-section">
             <label for="song-upload" id="song-upload-label">
@@ -25,6 +29,7 @@
             <!-- Playback controls will be dynamically added here -->
         </div>
     </div>
+    <script src="https://unpkg.com/tone"></script>
     <script src="https://unpkg.com/wavesurfer.js"></script>
     <script src="script.js"></script>
 </body>
